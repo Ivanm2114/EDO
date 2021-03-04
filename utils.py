@@ -3,6 +3,7 @@ import openpyxl
 import shutil
 
 
+
 def getContent(file):
     def getChilds(root):
         d = {}
@@ -35,9 +36,10 @@ def getContent(file):
 
 def putIntoXLS(data):
     shutil.copyfile('ЭДО\\Schet.xlsx', 'ЭДО\\result.xlsx')
-    workbook = openpyxl.load_workbook('ЭДО\\result.xlsx')
+    workbook = openpyxl.load_workbook('ЭДО\\Schet.xlsx')
     sheet = workbook['TDSheet']
-    cell = sheet.cell(row=4, column=2)
-    print(sheet['B4'].value)
-    for cell in sheet:
-        print(cell)
+    sheet['B2'] = data['Поставщик'][0]['БанкРекв']['НаимБанк']
+    workbook.save('ЭДО\\result.xlsx')
+
+
+

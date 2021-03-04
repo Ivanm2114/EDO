@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+import openpyxl
+import shutil
 
 
 def getContent(file):
@@ -29,3 +31,13 @@ def getContent(file):
             content[child.tag].append(child.attrib)
 
     return content
+
+
+def putIntoXLS(data):
+    shutil.copyfile('ЭДО\\Schet.xlsx', 'ЭДО\\result.xlsx')
+    workbook = openpyxl.load_workbook('ЭДО\\result.xlsx')
+    sheet = workbook['TDSheet']
+    cell = sheet.cell(row=4, column=2)
+    print(sheet['B4'].value)
+    for cell in sheet:
+        print(cell)

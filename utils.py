@@ -1,9 +1,7 @@
 import xml.etree.ElementTree as ET
-from copy import copy
-
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 import openpyxl
 import shutil
-from openpyxl.styles import Border, Side
 
 
 def getContent(file):
@@ -69,6 +67,7 @@ def putIntoXLS(data):
     sheet['G20'] = data['Параметр'][0]['Значение']
     row = 23
     i = 1
+    arr = ['B', 'D', 'Y', 'AC', 'AF', 'AK']
     for el in data['ТаблДок'][0]['СтрТабл']:
         sheet.merge_cells(f'B{row}:C{row}')
         sheet.merge_cells(f'D{row}:X{row}')
@@ -79,19 +78,17 @@ def putIntoXLS(data):
         sheet.row_dimensions[row].height = 50
         sheet[f'B{row}'] = i
         sheet[f'D{row}'] = el['Название']
+        for letter in arr:
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thin, color='FF000000'),
+                                                    left=Side(border_style=thin, color='FF000000'))
+            sheet[f'{letter}{row}'].alignment = Alignment(horizontal='left',
+                                                          vertical='top',
+                                                          text_rotation=0,
+                                                          wrap_text=False,
+                                                          shrink_to_fit=False, indent=0)
         i += 1
         row += 1
-    new_cell = sheet['AU17']
-    cell = sheet['D23']
-    for row in sheet.rows:
-            if cell.has_style:
-                new_cell.font = copy(cell.font)
-                new_cell.border = copy(cell.border)
-                new_cell.fill = copy(cell.fill)
-                new_cell.number_format = copy(cell.number_format)
-                new_cell.protection = copy(cell.protection)
-                new_cell.alignment = copy(cell.alignment)
-
-    sheet.row_dimensions[24].height = 50
 
     workbook.save('ЭДО\\result.xlsx')

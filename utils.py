@@ -212,7 +212,7 @@ def putIntoXLS(data):
 
         index += 1
     row += 3
-    sheet.row_dimensions[row].height = 2*k
+    sheet.row_dimensions[row].height = 2 * k
     row += 1
 
     for letter in arr + ['AQ']:
@@ -220,6 +220,39 @@ def putIntoXLS(data):
 
     row += 2
 
-    sheet[f]
+    sheet[f'B{row}'] = 'Руководитель'
+    sheet[f'B{row}'].font = Font(name='Arial',
+                                 size=9,
+                                 bold=True,
+                                 italic=False,
+                                 vertAlign=None,
+                                 underline='none',
+                                 strike=False,
+                                 color='FF000000')
+    sheet[f'B{row}'].alignment = Alignment(horizontal='left',
+                                           vertical='bottom',
+                                           text_rotation=0,
+                                           wrap_text=False,
+                                           shrink_to_fit=False, indent=0)
+    sheet[f'Z{row}'] = 'Бухгалтер'
+    sheet[f'Z{row}'].font = Font(name='Arial',
+                                 size=9,
+                                 bold=True,
+                                 italic=False,
+                                 vertAlign=None,
+                                 underline='none',
+                                 strike=False,
+                                 color='FF000000')
+    sheet[f'Z{row}'].alignment = Alignment(horizontal='left',
+                                           vertical='bottom',
+                                           text_rotation=0,
+                                           wrap_text=False,
+                                           shrink_to_fit=False, indent=0)
+
+    letter_underline = ['I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'AG', 'AH', 'AI',
+                        'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS']
+
+    for i in letter_underline:
+        sheet[f'{i}{row}'].border = Border(bottom=Side(border_style=thin, color='FF000000'))
 
     workbook.save('ЭДО\\result.xlsx')

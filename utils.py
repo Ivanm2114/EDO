@@ -51,7 +51,7 @@ def getContent(file):
 
 def putIntoXLS(data):
     thin = 'thin'
-    thick = 'thick'
+    thick = 'medium'
     shutil.copyfile('ЭДО\\Schet.xlsx', 'ЭДО\\result.xlsx')
     workbook = openpyxl.load_workbook('ЭДО\\Schet.xlsx')
     sheet = workbook['TDSheet']
@@ -67,7 +67,10 @@ def putIntoXLS(data):
     sheet['G20'] = data['Параметр'][0]['Значение']
     row = 23
     i = 1
-    arr = ['B', 'D', 'Y', 'AC', 'AF', 'AK']
+    arr = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+           'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO',
+           'AP', 'AQ']
+
     for el in data['ТаблДок'][0]['СтрТабл']:
         sheet.merge_cells(f'B{row}:C{row}')
         sheet.merge_cells(f'D{row}:X{row}')
@@ -78,17 +81,51 @@ def putIntoXLS(data):
         sheet.row_dimensions[row].height = 50
         sheet[f'B{row}'] = i
         sheet[f'D{row}'] = el['Название']
+
         for letter in arr:
-            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
-                                                    right=Side(border_style=thin, color='FF000000'),
-                                                    bottom=Side(border_style=thin, color='FF000000'),
-                                                    left=Side(border_style=thin, color='FF000000'))
+            if letter == 'B':
+                sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                        right=Side(border_style=thin, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
+                                                        left=Side(border_style=thick, color='FF000000'))
+            elif letter == 'AQ':
+                sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                        right=Side(border_style=thin, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
+                                                        left=Side(border_style=thick, color='FF000000'))
+            else:
+                sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                        right=Side(border_style=thin, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
+                                                        left=Side(border_style=thin, color='FF000000'))
+
             sheet[f'{letter}{row}'].alignment = Alignment(horizontal='left',
                                                           vertical='top',
                                                           text_rotation=0,
-                                                          wrap_text=False,
+                                                          wrap_text=True,
                                                           shrink_to_fit=False, indent=0)
+
         i += 1
         row += 1
+
+    row -= 1
+    for letter in arr:
+        if letter == 'B':
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thick, color='FF000000'))
+        elif letter == 'AQ':
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thick, color='FF000000'))
+        else:
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thin, color='FF000000'))
+
+    row += 1
 
     workbook.save('ЭДО\\result.xlsx')

@@ -1,0 +1,5 @@
+from utils import *
+
+content = getContent('ЭДО/ON_SCHET_9715004232771501001_7720518494772843001_20210312_005056AB406E1EEBA0E5C14C8E9230A6 (796477 v1).XML')
+print(content)
+putIntoXLS(content)

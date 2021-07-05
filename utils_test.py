@@ -20,7 +20,6 @@ def create_table_end(start_row, cols):
 
     for i in range(1, count + 1):
         row = start_row + i
-        print(row)
         sheet.merge_cells(f'B{row}:C{row}')
         sheet.merge_cells(f'D{row}:X{row}')
         sheet.merge_cells(f'Y{row}:AB{row}')
@@ -58,26 +57,39 @@ def create_table_end(start_row, cols):
                                                           shrink_to_fit=False, indent=0)
 
         i += 1
-        row += 1
-
-        row -= 1
         for letter in arr:
             if letter == 'B':
                 sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
                                                         right=Side(border_style=thin, color='FF000000'),
-                                                        bottom=Side(border_style=thick, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
                                                         left=Side(border_style=thick, color='FF000000'))
             elif letter == 'AQ':
                 sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
                                                         right=Side(border_style=thick, color='FF000000'),
-                                                        bottom=Side(border_style=thick, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
                                                         left=Side(border_style=thick, color='FF000000'))
             else:
                 sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
                                                         right=Side(border_style=thin, color='FF000000'),
-                                                        bottom=Side(border_style=thick, color='FF000000'),
+                                                        bottom=Side(border_style=thin, color='FF000000'),
                                                         left=Side(border_style=thin, color='FF000000'))
 
+    for letter in arr:
+        if letter == 'B':
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thick, color='FF000000'))
+        elif letter == 'AQ':
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thick, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thick, color='FF000000'))
+        else:
+            sheet[f'{letter}{row}'].border = Border(top=Side(border_style=thin, color='FF000000'),
+                                                    right=Side(border_style=thin, color='FF000000'),
+                                                    bottom=Side(border_style=thick, color='FF000000'),
+                                                    left=Side(border_style=thin, color='FF000000'))
     row += 3
     for i in range(3):
         sheet.merge_cells(f'AL{row + i}:AQ{row + i}')
@@ -95,43 +107,94 @@ def create_table_end(start_row, cols):
         sheet.row_dimensions[row + i].height = 15
 
     sheet[f'AK{row}'] = 'Итого:'
+    sheet[f'AK{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AL{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AL{row}'] = get_root(f[-1])
+    row += 1
+    sheet[f'AK{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AL{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AK{row}'] = 'В том числе НДС:'
+    sheet[f'AL{row}'] = get_root(f[-2])
+    row += 1
+    sheet[f'AK{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AL{row}'].font = Font('Arial', 9, bold=True)
+    sheet[f'AK{row}'] = 'Всего к оплате:'
+    sheet[f'AL{row}'] = get_root(f[-1])
 
-    # sheet[f'AL{row}'] = data['ТаблДок'][0]['ИтогТабл']['Сумма']
-    # row += 1
-    # sheet[f'AK{row}'] = 'В том числе НДС:'
-    # # sheet[f'AL{row}'] = data['ТаблДок'][0]['ИтогТабл']['НДС']['Сумма']
-    # row += 1
-    # sheet[f'AK{row}'] = 'Всего к оплате:'
-    # # sheet[f'AL{row}'] = data['ТаблДок'][0]['ИтогТабл']['Сумма']
+    row += 1
+    sheet.row_dimensions[row].height = k
+    rubles = int(sheet[f"AL{row - 1}"].value.split('.')[0])
+    cents = sheet[f"AL{row - 1}"].value.split('.')[1]
+    rubles = num2words(rubles, to='cardinal', lang='ru')
+    sheet.merge_cells(f'B{row}:AR{row}')
+    sheet[f'B{row}'] = f'Всего наименований {i} на сумму {sheet[f"AL{row - 1}"].value} руб'
+    sheet[f'B{row}'].font = Font(name='Arial',
+                                 size=9,
+                                 bold=False,
+                                 italic=False,
+                                 vertAlign=None,
+                                 underline='none',
+                                 strike=False,
+                                 color='FF000000')
 
-    # row += 1
-    # sheet.row_dimensions[row].height = k
-    # rubles = int(sheet[f"AL{row - 1}"].value.split('.')[0])
-    # cents = sheet[f"AL{row - 1}"].value.split('.')[1]
-    # rubles = num2words(rubles, to='cardinal', lang='ru')
-    # sheet.merge_cells(f'B{row}:AR{row}')
-    # sheet[f'B{row}'] = f'Всего наименований {i} на сумму {sheet[f"AL{row - 1}"].value} руб'
-    # sheet[f'B{row}'].font = Font(name='Arial',
-    #                              size=9,
-    #                              bold=False,
-    #                              italic=False,
-    #                              vertAlign=None,
-    #                              underline='none',
-    #                              strike=False,
-    #                              color='FF000000')
-    #
-    # row += 1
-    # sheet.row_dimensions[row].height = k
-    # sheet.merge_cells(f'B{row}:AP{row}')
-    # sheet[f'B{row}'] = f'{rubles.capitalize()} рублей {cents} копеек'
-    # sheet[f'B{row}'].font = Font(name='Arial',
-    #                              size=9,
-    #                              bold=True,
-    #                              italic=False,
-    #                              vertAlign=None,
-    #                              underline='none',
-    #                              strike=False,
-    #                              color='FF000000')
+    row += 1
+    sheet.row_dimensions[row].height = k
+    sheet.merge_cells(f'B{row}:AP{row}')
+    sheet[f'B{row}'] = f'{rubles.capitalize()} рублей {cents} копеек'
+    sheet[f'B{row}'].font = Font(name='Arial',
+                                 size=9,
+                                 bold=True,
+                                 italic=False,
+                                 vertAlign=None,
+                                 underline='none',
+                                 strike=False,
+                                 color='FF000000')
+
+    final_text = ['Внимание!', 'Оплата данного счета означает согласие с условиями поставки товара.',
+                  'Уведомление об оплате обязательно, в противном случае не гарантируется наличие товара на складе.',
+                  'Товар отпускается по факту прихода денег на р/с Поставщика, самовывозом,'
+                  ' при наличии доверенности и паспорта.']
+
+    row += 2
+
+    for i in range(4):
+        sheet[f'B{row + i}'].font = Font('Arial', 9)
+        sheet.merge_cells(f'B{row + i}:AQ{row + i}')
+        sheet.row_dimensions[row + i].height = k
+        sheet[f'B{row + i}'] = final_text[i]
+        sheet[f'B{row + i}'].alignment = Alignment(horizontal='left',
+                                                   vertical='top',
+                                                   text_rotation=0,
+                                                   wrap_text=True, indent=0)
+
+    sheet.row_dimensions[row + i].height = k * 2
+
+    row += i + 1
+
+    for letter in arr:
+        sheet[f'{letter}{row}'].border = Border(bottom=Side(border_style=thick, color='FF000000'))
+
+    row += 2
+    sheet[f'B{row}'] = 'Руководитель'
+    sheet[f'B{row}'].alignment = Alignment(horizontal='left',
+                                           vertical='top',
+                                           text_rotation=0,
+                                           wrap_text=False,
+                                           shrink_to_fit=False, indent=0)
+    sheet[f'B{row}'].font = Font('Arial', 9, bold=True)
+
+    sheet[f'Z{row}'] = 'Бухгалтер'
+    sheet[f'Z{row}'].alignment = Alignment(horizontal='left',
+                                           vertical='top',
+                                           text_rotation=0,
+                                           wrap_text=False,
+                                           shrink_to_fit=False, indent=0)
+    sheet[f'Z{row}'].font = Font('Arial', 9, bold=True)
+    for letter in ['H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']:
+        sheet[f'{letter}{row}'].border = Border(bottom=Side(border_style=thin, color='FF000000'))
+
+    for letter in ['AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ']:
+        sheet[f'{letter}{row}'].border = Border(bottom=Side(border_style=thin, color='FF000000'))
 
 
 def get_root(path, n=-1):
@@ -157,6 +220,10 @@ def get_root(path, n=-1):
                     break
                 del arr[0]
         else:
+            count = 0
+            for el in a:
+                if el == step:
+                    count += 1
             if flag:
                 indexes = []
                 for j in range(len(a)):
@@ -164,9 +231,9 @@ def get_root(path, n=-1):
                         indexes.append(j)
                 root = root[indexes[n]]
                 flag = False
-            elif a.count(step) == 1:
+            elif count == 1:
                 root = root[a.index(step)]
-            elif a.count(step) > 1:
+            elif count > 1:
                 indexes = []
                 for j in range(len(a)):
                     if a[j] == step:
@@ -177,17 +244,18 @@ def get_root(path, n=-1):
                             root = root[j]
                     except IndexError:
                         pass
+                    except KeyError:
+                        pass
     if '/' in path[-1]:
         arr = path[-1].split('/')
-        print(arr)
         while arr:
             try:
-                return root.attrib[arr[0]]
+                return root.attrib[arr[0].strip()]
             except KeyError:
                 del arr[0]
         return ''
     try:
-        return root.attrib[path[-1]]
+        return root.attrib[path[-1].strip()]
     except KeyError:
         return ''
 
@@ -207,7 +275,7 @@ string = False
 table = False
 
 tree = ET.parse(
-    'ЭДО/ON_SCHET___20210209_dbcfe2dd-a95c-4b8f-98bc-a0b9e907adb1.xml')
+    'ЭДО/ON_SCHET___20210621_c1123434-2093-4dde-9669-9dfd216c043f (826751 v1).XML')
 f = open('config.txt', encoding='utf-8').readlines()
 while i < len(f):
     el = f[i].strip()
@@ -224,6 +292,7 @@ while i < len(f):
             i += 1
             el = f[i].strip()
         create_table_end(row, cols)
+        break
     elif 'СТРОКА' in el:
         route, cell = el.split(';')
         s = ''

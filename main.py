@@ -9,7 +9,7 @@ from num2words import num2words
 from datetime import datetime
 
 
-def convert(open_filename, result_file='lol'):
+def convert(open_filename, result_file='result'):
     def create_table_end(start_row, cols, tree):
         arr = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                'W',
@@ -330,15 +330,16 @@ class MainWindow(QMainWindow):
     def choseFile(self):
         fname = QFileDialog.getOpenFileName(self, 'Выбрать файл', '', 'Файл (*.xml)')[0]
         self.lineEdit.setText(fname)
+        self.label_2.setText('')
 
     def tryConvert(self):
         if self.lineEdit.text() != '':
             start_file = self.lineEdit.text()
             result_file = '.'.join(start_file.split('.')[:-1])
             convert(start_file, result_file)
-            sys.exit(0)
+            self.label_2.setText(f'Файл {result_file.split("/")[-1]}\nготов')
         elif self.lineEdit.text() == '':
-            self.label_2.setText('Выберите исходный файл')
+            self.label_2.setText('Выберите исходный файл.')
 
 
 
